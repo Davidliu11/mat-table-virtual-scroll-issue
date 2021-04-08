@@ -10,9 +10,10 @@
     </mat-form-field>
   </div>
   <cdk-virtual-scroll-viewport class="data-grid-table-wrapper" [tvsItemSize]="50" [headerHeight]="56"
-    [bufferMultiplier]="5" [ngStyle]="{'height.px': 500, 'width': '100%'}">
+    [bufferMultiplier]="1" [ngStyle]="{'height.px': 500, 'width': '100%'}">
     <table mat-table [dataSource]="tableRows">
-      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnNames;">
+      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnNames; let i = index;"
+        sticky="{{i < 2}}">
         <th mat-header-cell *matHeaderCellDef>
           <span>{{column}}</span>
         </th>
@@ -23,8 +24,10 @@
               $implicit: row[column].value
             }"
             [ngTemplateOutlet]="self" #self>
-            <div [tooltip]="cellValeTpl.scrollWidth < 150 ? cellValueTooltip : undefined">
-              <div #cellValeTpl>{{ cellValue }}</div>
+            <div
+              [ngClass]="{ 'small-font': cellValueTpl.scrollWidth < 150 }"
+              [tooltip]="cellValueTpl.scrollWidth < 150 ? cellValueTooltip : undefined">
+              <div #cellValueTpl>{{ cellValue }}</div>
             </div>
             <ng-template #cellValueTooltip>
               This cell value is {{cellValue}}!

@@ -34,14 +34,22 @@ export class AppComponent {
     this.columnNames = [...Array(this.columnCount).keys()].map((value: any, index: any) => {
       return 'Column' + index;
     });
+    this.columnNames.unshift('entity');
 
     this.dataRows = [...Array(this.rowCount).keys()].map((value, index) => {
       const row = {};
       this.columnNames.forEach((column: any) => {
-        row[column] = {
-          value: Math.floor((Math.random() * 100)),
-          cellClass: this.colorClasses[(Math.ceil((Math.random() * 300) / 100)) - 1]
-        };
+        if (column === 'entity') {
+          row[column] = {
+            value: `Row ${index}`,
+            cellClass: ''
+          };
+        } else {
+          row[column] = {
+            value: Math.floor((Math.random() * 100)),
+            cellClass: this.colorClasses[(Math.ceil((Math.random() * 300) / 100)) - 1]
+          };
+        }
       });
       return row;
     });
