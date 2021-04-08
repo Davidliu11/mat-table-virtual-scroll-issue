@@ -1,0 +1,39 @@
+.virtual-table-test {
+    padding: 20px;
+    .increator {
+        height: 65px;
+        mat-form-field {
+            margin-right: 10px;
+        }
+    }
+    .data-grid-table-wrapper {
+       border-bottom: 2px solid;
+
+      .mat-table {
+        width: 100%;
+        .mat-header-row {
+          background: #f4f4f4;
+          .mat-header-cell {
+            padding: 20px;
+            text-transform: uppercase;
+          }
+        }
+        .mat-cell {
+          padding: 10px 20px;
+          border: 1px solid #ddd;
+          &.cell-color-red {
+            background-color: #ff8080;
+          }
+          &.cell-color-green {
+            background-color: #80ff80;
+          }
+          &.cell-color-blue {
+            background-color: #8080ff;
+          }
+          .small-font {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+}
