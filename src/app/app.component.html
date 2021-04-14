@@ -1,43 +1,95 @@
 <div class="virtual-table-test">
   <div class="increator">
     <mat-form-field>
+      <mat-label>NavItem</mat-label>
+      <input matInput type="number" [(ngModel)]="navCount" (ngModelChange)="getNewTableRowAndColumns()">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Table Buffer Multiplier</mat-label>
+      <input matInput type="number" [(ngModel)]="bufferMultiplier" (ngModelChange)="getNewTableRowAndColumns()">
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Rows</mat-label>
-      <input matInput type="number" [(ngModel)]="rowCount" (ngModelChange)="rowChange($event)">
+      <input matInput type="number" [(ngModel)]="rowCount" (ngModelChange)="getNewTableRowAndColumns()">
     </mat-form-field>
     <mat-form-field>
       <mat-label>Columns</mat-label>
-      <input matInput type="number" [(ngModel)]="columnCount" (ngModelChange)="columnsChange($event)">
+      <input matInput type="number" [(ngModel)]="columnCount" (ngModelChange)="getNewTableRowAndColumns()">
     </mat-form-field>
   </div>
-  <cdk-virtual-scroll-viewport class="data-grid-table-wrapper" [tvsItemSize]="50" [headerHeight]="56"
-    [bufferMultiplier]="1" [ngStyle]="{'height.px': 500, 'width': '100%'}">
-    <table mat-table [dataSource]="tableRows">
-      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnNames; let i = index;"
-        sticky="{{i < 2}}">
-        <th mat-header-cell *matHeaderCellDef>
-          <span>{{column}}</span>
-        </th>
-        <td mat-cell *matCellDef="let row" [ngClass]="row[column].cellClass">
+  <div class="main-layout">
+    <div class="side-nav">
+      <ul class="nav-list">
+        <li class="nav-item" *ngFor="let nav of navItems">
+          <div #navItem
+            [tooltip]="navItem.scrollWidth > navItem.offsetWidth ? 'THIS IS A TEST TOOLTIP' : undefined"
+            [container]="'body'" class="nav-title">
+            {{nav}}
+          </div>
+        </li>
+      </ul>
+    </div>
+    <cdk-virtual-scroll-viewport class="data-grid-table-wrapper" [tvsItemSize]="50" [headerHeight]="56"
+      [bufferMultiplier]="5" >
+      <table mat-table [dataSource]="tableRowsSource">
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of columnNames; let i = index;"
+          sticky="{{i < 2}}">
+          <th mat-header-cell *matHeaderCellDef>
+            <span>{{column}}</span>
+          </th>
+          <td mat-cell *matCellDef="let row" [ngClass]="row[column].cellClass">
 
-          <ng-template let-cellValue
-            [ngTemplateOutletContext]="{
-              $implicit: row[column].value
-            }"
-            [ngTemplateOutlet]="self" #self>
-            <div
-              [ngClass]="{ 'small-font': cellValueTpl.scrollWidth < 150 }"
-              [tooltip]="cellValueTpl.scrollWidth < 150 ? cellValueTooltip : undefined">
-              <div #cellValueTpl>{{ cellValue }}</div>
-            </div>
-            <ng-template #cellValueTooltip>
-              This cell value is {{cellValue}}!
+            <ng-template let-cellValue
+              [ngTemplateOutletContext]="{
+                $implicit: row[column].value
+              }"
+              [ngTemplateOutlet]="self" #self>
+              <ng-container [ngSwitch]="column">
+                <ng-container *ngSwitchCase="'entity'">
+                  <div class="entity-cell" container="body" dropdown>
+                    <div class="dropdown-toggle" dropdownToggle
+                        aria-controls="dropdown-container">
+                        <div
+                            [tooltip]="cellValue?.length >  1 ? cellValueTooltip : undefined"
+                            [placement]="'bottom'"
+                            container="body">
+                            {{cellValue}}
+                        </div>
+                    </div>
+                    <ul class="dropdown-menu" id="dropdown-container" *dropdownMenu
+                        role="menu" aria-labelledby="button-container">
+                        <li *ngFor="let menu of [{title: 'menu1'}]" role="menuitem">
+                            <a (click)="menu?.eventClick()" class="menu-link">
+                                {{menu.title}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                    <ng-container *ngIf="true" [tooltip]="cellValue?.length > 1 ? cellValueTooltip : undefined">
+                      {{cellValue}}
+                    </ng-container>
+                </ng-container>
+                <ng-template #cellValueTooltip>
+                  This cell value is {{cellValue}}!
+                </ng-template>
+              </ng-container>
+              <!-- test value with tooltip -->
+              <!-- <div [ngClass]="{ 'small-font': cellValueTpl.scrollWidth < 150 }">
+                <div #cellValueTpl
+                  [tooltip]="cellValueTpl.scrollWidth < 350 ? cellValueTooltip : undefined"
+                  [container]="'body'">
+                  {{ cellValue }}
+                </div>
+              </div> -->
             </ng-template>
-          </ng-template>
-        </td>
-      </ng-container>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="columnNames, sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: columnNames;" [ngStyle]="{'height.px': 50}"></tr>
-    </table>
-  </cdk-virtual-scroll-viewport>
+        <tr mat-header-row *matHeaderRowDef="columnNames, sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnNames;" [ngStyle]="{'height.px': 50}"></tr>
+      </table>
+    </cdk-virtual-scroll-viewport>
+  </div>
 </div>

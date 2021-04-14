@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 @Component({
   selector: 'app-root',
@@ -6,15 +6,17 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
   styleUrls: ['./app.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'mat-table-virtual-scroll-issue';
   columnNames: any[] = [];
-  tableRows = new TableVirtualScrollDataSource();
-  columns = [];
+  tableRowsSource = new TableVirtualScrollDataSource();
   dataRows = [];
+  navItems: any[] = [];
 
-  rowCount = 1;
-  columnCount = 1;
+  bufferMultiplier = 5;
+  rowCount = 300;
+  columnCount = 20;
+  navCount = 20;
 
   colorClasses = ['cell-color-red', 'cell-color-green', 'cell-color-blue'];
 
@@ -22,15 +24,15 @@ export class AppComponent {
 
   }
 
-  rowChange(value: number): void {
-    this.getNewTableRowAndColumns();
-  }
-
-  columnsChange(value: number): void {
+  ngOnInit(): void {
     this.getNewTableRowAndColumns();
   }
 
   getNewTableRowAndColumns(): void {
+    this.navItems = [...Array(this.navCount).keys()].map((value: any, index: any) => {
+      return 'Nav Item loooooooooooooooooooooooooooooooooooooog' + (index + 1);
+    });
+
     this.columnNames = [...Array(this.columnCount).keys()].map((value: any, index: any) => {
       return 'Column' + index;
     });
@@ -53,8 +55,8 @@ export class AppComponent {
       });
       return row;
     });
-    this.tableRows.data = this.dataRows;
+
+    this.tableRowsSource.data = this.dataRows;
     this.cdr.detectChanges();
-    console.log(this.tableRows.data);
   }
 }
