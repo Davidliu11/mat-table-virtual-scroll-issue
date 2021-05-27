@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import { TableVirtualScrollDataSource } from './directives/table-data-source';
+// import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,8 +14,8 @@ export class AppComponent implements OnInit {
   dataRows = [];
   navItems: any[] = [];
 
-  bufferMultiplier = 5;
-  rowCount = 300;
+  bufferMultiplier = 0;
+  rowCount = 1300;
   columnCount = 20;
   navCount = 20;
 

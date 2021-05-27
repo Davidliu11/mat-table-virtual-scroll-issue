@@ -29,7 +29,7 @@
         </li>
       </ul>
     </div>
-    <cdk-virtual-scroll-viewport class="data-grid-table-wrapper" [tvsItemSize]="50" [headerHeight]="56"
+    <cdk-virtual-scroll-viewport class="data-grid-table-wrapper" [tvsItemSizeEx]="48" [headerHeight]="56"
       [bufferMultiplier]="5" >
       <table mat-table [dataSource]="tableRowsSource">
         <ng-container matColumnDef="{{column}}" *ngFor="let column of columnNames; let i = index;"

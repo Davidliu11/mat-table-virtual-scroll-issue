@@ -10,10 +10,12 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TableItemSizeExDirective } from './directives/table-item-size.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TableItemSizeExDirective
   ],
   imports: [
     FormsModule,
